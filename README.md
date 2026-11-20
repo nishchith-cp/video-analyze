@@ -43,9 +43,13 @@ Restart your Copilot session if the skill isn't listed.
 /video-analyze /absolute/path/to/video.mp4
 ```
 
-Videos need both video and audio streams; live streams aren't supported.
+Choose the full bundle or snapshots only when prompted; explicit choices skip
+the prompt. Snapshots-only supports silent videos (`--frames-only`).
+Transcription needs audio; live streams aren't supported.
 Local originals stay untouched. By default, Copilot saves files without
 reading transcripts or opening frames. Ask separately for content analysis.
+CLI options include `--start 01:00 --end 02:30` (source-relative timestamps)
+and `--privacy` (redacted input paths and quieter logs). Details: [SKILL.md](SKILL.md).
 
 ## Output
 
@@ -61,6 +65,8 @@ your-output-folder/
 ```
 
 URL inputs also save `video.<ext>` and `download-path.txt`.
+Snapshots-only omits audio/transcripts. Completion links include files and
+the output/snapshots folders.
 
 [Browse fictional example outputs](examples/expected-output) (not real recordings).
 Check `manifest.json` for completion; failed runs retain partial files.
@@ -71,9 +77,14 @@ Check `manifest.json` for completion; failed runs retain partial files.
 - Transcription runs locally. Downloads contact video providers; setup downloads
   packages and models. No browser cookies or login credentials are supplied.
 - Outputs stay on disk without added encryption or automatic deletion.
-  Logs may expose signed URLs; manifests include absolute file paths.
+  Logs may expose signed URLs; manifests include absolute file paths unless
+  `--privacy` is selected. Privacy mode does not sanitize media or hide requests.
 - Chat, tool output, and requested content analysis follow your assistant host's
   data policies. Review files before sharing; Git ignore rules aren't access controls.
 
 Only process videos you're authorized to use. For advanced usage, defaults,
 and safety guidance, see [SKILL.md](SKILL.md).
+
+Offline checks: `python -m unittest discover -s scripts -p 'test_*.py'`
+(requires FFmpeg; synthetic media and model stubs, no downloads). GitHub Actions
+runs these checks on pushes and pull requests.
