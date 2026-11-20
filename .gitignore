@@ -3,3 +3,22 @@ __pycache__/
 *.py[cod]
 .DS_Store
 video-analysis-*/
+frames/
+audio.wav
+video.*
+download-path.txt
+transcript.txt
+transcript.srt
+transcript.json
+manifest.json
+frames.json
+.env
+.env.*
+!.env.example
+
+# Only these explicitly synthetic output fixtures belong in version control.
+!examples/expected-output/transcript.txt
+!examples/expected-output/transcript.srt
+!examples/expected-output/transcript.json
+!examples/expected-output/manifest.json
+!examples/expected-output/frames.json

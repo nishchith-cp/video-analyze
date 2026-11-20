@@ -111,6 +111,80 @@ Failed or interrupted runs retain partial artifacts. Do not treat them as
 completed results. Recognition can be inaccurate; transcription is not
 verification of what a speaker said.
 
+### Expected output example
+
+See [examples/expected-output](examples/expected-output) for **hand-authored,
+synthetic fixtures**, not a recording or a real Whisper result. They illustrate
+a hypothetical 60-second local video with two sampled frames and two speech
+segments. `/example/input/demo.mp4` is a fictional path. Media binaries are
+deliberately omitted; the frame paths show where a real run would save them.
+
+```text
+new-output-directory/
+  manifest.json
+  frames.json
+  frames/
+    frame-0001.jpg
+    frame-0002.jpg
+  audio.wav
+  transcript.txt
+  transcript.srt
+  transcript.json
+```
+
+The sample [plain-text transcript](examples/expected-output/transcript.txt):
+
+```text
+This is a fictional demonstration.
+The output includes timestamped frames and a local transcript.
+```
+
+The [manifest](examples/expected-output/manifest.json) records completion,
+language, frame count, and transcript paths. The
+[JSON transcript](examples/expected-output/transcript.json) and
+[SRT subtitles](examples/expected-output/transcript.srt) demonstrate segment
+timing. A URL run additionally saves `video.<ext>` and `download-path.txt`.
+If no speech is detected, TXT/SRT files are empty, JSON `segments` is empty,
+and the manifest reports `no_speech_detected` with `segment_count: 0`.
+
+## Privacy and data handling
+
+**Local Whisper processing does not mean the entire workflow is offline or
+that its artifacts are safe to publish.** The helper does not explicitly upload
+audio to a transcription API, but dependencies and the assistant host have
+their own behavior and data policies.
+
+- **Network:** URL runs contact the video provider and potentially its CDNs,
+  exposing the requested resource and your IP address. Initial setup/model
+  downloads contact package registries and model hosting services. The helper
+  does not pass browser cookies or login credentials and ignores yt-dlp config.
+- **Assistant context and logs:** a URL or path supplied in chat/tool arguments,
+  command output, and the completion manifest may be retained by the assistant
+  host. yt-dlp logs and exception text can reveal URLs, including signed query
+  parameters. Avoid sensitive/token-bearing URLs; use an authorized local copy
+  when appropriate. Do not publish unredacted command logs.
+- **Retained content:** downloaded video, WAV audio, JPEG frames, and transcripts
+  remain on disk, including partial artifacts after failure. The helper adds
+  no encryption, permission hardening, or automatic deletion. Files inherit
+  platform permissions and may be included in backups or cloud sync.
+- **Local paths:** `manifest.json` stores the absolute input video path;
+  `download-path.txt` records the absolute downloaded path for URL runs.
+  These can reveal a username, folder names, or a confidential filename.
+  Frame paths in `frames.json` are relative to the output folder.
+- **Model access:** files-only mode avoids opening media/transcripts in model
+  context; it still reads the manifest. Requesting a summary or visual analysis
+  sends the selected content into assistant context under the host's policies.
+- **Publishing:** use synthetic fixtures, not a real person's voice, likeness,
+  or transcript, for public examples. Review all staged files and copies of
+  manifests/logs before sharing. Ignore rules exclude standard generated output
+  names, environments, and `.env` files, but do not protect arbitrary filenames,
+  already tracked files, forced additions, or Git history.
+
+Keep sensitive output outside shared repositories and synced folders when
+possible. Retain it only as long as needed, and remove only the specific output
+directory you intend to delete; local input originals are not copied or deleted.
+The example fixtures in this repository contain no real media or transcript.
+
 ## Troubleshooting
 
 - **Missing FFmpeg:** install it and verify `ffmpeg -version` and

@@ -1,0 +1,22 @@
+{
+  "status": "complete",
+  "stage": "complete",
+  "model": "base",
+  "requested_language": null,
+  "frame_interval_seconds": 30,
+  "max_frames": 60,
+  "input_kind": "local",
+  "video": "/example/input/demo.mp4",
+  "duration_seconds": 60.0,
+  "frame_count": 2,
+  "audio": "audio.wav",
+  "frames_index": "frames.json",
+  "transcription_status": "speech_detected",
+  "segment_count": 2,
+  "language": "en",
+  "transcripts": [
+    "transcript.txt",
+    "transcript.srt",
+    "transcript.json"
+  ]
+}

@@ -1,0 +1,2 @@
+This is a fictional demonstration.
+The output includes timestamped frames and a local transcript.

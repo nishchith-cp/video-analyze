@@ -1,0 +1,16 @@
+{
+  "language": "en",
+  "language_probability": 0.99,
+  "segments": [
+    {
+      "start": 0.5,
+      "end": 2.0,
+      "text": "This is a fictional demonstration."
+    },
+    {
+      "start": 3.0,
+      "end": 5.0,
+      "text": "The output includes timestamped frames and a local transcript."
+    }
+  ]
+}
