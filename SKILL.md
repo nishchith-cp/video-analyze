@@ -8,6 +8,27 @@ argument-hint: <video URL or local video path>
 
 Invoke with `/video-analyze <video URL or local video path>`.
 
+## Prerequisites and first-time setup
+
+Requires Python **3.10-3.13**, `ffmpeg` and `ffprobe` on `PATH`, plus
+`yt-dlp>=2025.1.1`, `faster-whisper>=1.1,<2`, and `av>=15,<17`.
+Use `uv` for setup or fallback execution; it reads the dependencies declared in
+`scripts/analyze.py`. See [README.md](README.md) for installation commands.
+
+Resolve the actual installed skill directory rather than relying on a
+machine-specific absolute path. The examples below assume
+`~/.copilot/skills/video-analyze`; adjust if installed elsewhere.
+Prefer its existing `.venv/bin/python`; otherwise use
+`uv run --python 3.12 <skill-directory>/scripts/analyze.py`.
+If neither is available, report the missing prerequisite and ask before
+installing system software. Do not reinstall dependencies on every invocation.
+
+First use needs network access to download Python dependencies and the Whisper
+model. URL inputs also need network access and must be accessible without
+login. Allow disk space for the video, extracted uncompressed audio, frames,
+and cached model; requirements vary with video length and model size.
+Inputs must be finite videos with both video and audio streams.
+
 ## Low-token default
 
 Download if needed, extract frames, and transcribe locally. By default, produce
@@ -22,7 +43,7 @@ the command fails. Wait for command completion rather than repeatedly polling.
 
 ## Run
 
-Resolve this skill's installed directory; on this installation:
+Resolve this skill's installed directory; for the default user installation:
 
 ```bash
 ~/.copilot/skills/video-analyze/.venv/bin/python \
@@ -43,7 +64,7 @@ just to answer a follow-up; reuse its saved artifacts. An explicit fresh run or
 changed source/settings requires new output.
 
 Use the installed `.venv` above to avoid repeated dependency resolution. If it
-is absent, use `uv run <skill-directory>/scripts/analyze.py` with the same arguments.
+is absent, use `uv run --python 3.12 <skill-directory>/scripts/analyze.py` with the same arguments.
 Prerequisites: `ffmpeg`, `ffprobe`, and the declared Python dependencies.
 Keep the declared PyAV constraint: newer incompatible decoder APIs can break
 Whisper. `uv` uses an isolated cached environment. Whisper downloads its model once, then reuses its
